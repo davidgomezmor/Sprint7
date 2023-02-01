@@ -1,0 +1,19 @@
+h1 {
+	background-color: rgb(254, 254, 254);
+  text-align: center;
+}
+
+.App {
+	background-color: rgb(228, 77, 77);
+	appearance: none;
+	margin: 5px 900px 5px 50px;
+}
+
+.options {
+  margin-top: 10px;
+}
+
+
+/* .checkbox {
+  margin: 50px 900px 25px 50px;
+} */
