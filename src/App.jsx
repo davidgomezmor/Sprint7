@@ -1,11 +1,11 @@
-import { useState} from "react";
+import { useState } from "react";
 import { services } from "./services"
 import { PageAndLanguages } from "./components/PageAndLanguages";
 
 export default function App() {
 
-  const [pages, setPages] = useState(0);
-  const [languages, setLanguages] = useState(0);
+  let [pages, setPages] = useState(1);
+  let [languages, setLanguages] = useState(1);
   const [checkedState, setCheckedState] = useState(
     new Array(services.length).fill(false),
   );
@@ -39,7 +39,7 @@ export default function App() {
 
     setTotal(totalPrice + (pages * languages * 30));
 
-    
+
   };
   const printPrice = (price) => `${price}`;
   return (
@@ -68,15 +68,15 @@ export default function App() {
 
       {/* {checkedState[0] && index === 0 && (<PageAndLanguages/>)} */}
       <div>
-
-        <PageAndLanguages
-          key={4}
-          pages={pages}
-          languages={languages}
-          controlPages={controlPages}
-          controlLanguages={controlLanguages}
-        />
-
+        {!checkedState[0] ? ((pages = 0) && (languages = 0) && (setTotal(0))) :
+          (<PageAndLanguages
+            pages={pages}
+            languages={languages}
+            controlPages={controlPages}
+            controlLanguages={controlLanguages}
+            controlChanges={controlChanges}
+          />)
+        }
       </div>
       <div>
         <div>Total:
