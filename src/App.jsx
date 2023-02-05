@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { services } from "./services"
+import { useState, useEffect } from "react";
+import { services } from "./services";
 import { PageAndLanguages } from "./components/PageAndLanguages";
 
 export default function App() {
@@ -10,17 +10,7 @@ export default function App() {
     new Array(services.length).fill(false),
   );
   const [total, setTotal] = useState(0);
-
-  function controlPages(e) {
-    setPages(e.target.value);
-    controlChanges()
-  }
-
-  function controlLanguages(e) {
-    setLanguages(e.target.value);
-    controlChanges()
-  }
-
+  
   const controlChanges = (position) => {
     const updatedCheckedState = checkedState.map((item, index) =>
       index === position ? !item : item,
@@ -39,6 +29,12 @@ export default function App() {
 
     setTotal(totalPrice + (pages * languages * 30));
 
+    if (updatedCheckedState[0] === false) setPages(0);
+    if (updatedCheckedState[0] === false) setLanguages(0);
+
+    // useEffect(() => {
+    //   setTotal();
+    // }, [totalPrice, pages, languages]);
 
   };
   const printPrice = (price) => `${price}`;
@@ -60,8 +56,8 @@ export default function App() {
               <div>
                 {name}
               </div>
+              {price}
             </>
-            {printPrice(price)}
           </div>
         )
       })}
@@ -72,9 +68,8 @@ export default function App() {
           (<PageAndLanguages
             pages={pages}
             languages={languages}
-            controlPages={controlPages}
-            controlLanguages={controlLanguages}
-            controlChanges={controlChanges}
+            setPages={setPages}
+            setLanguages={setLanguages}         
           />)
         }
       </div>

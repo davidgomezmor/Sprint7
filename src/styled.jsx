@@ -61,3 +61,11 @@ margin-left: 10%;
 margin-bottom: 5%;
 font-size:30px;
 `;
+
+export const Button = styled.button`
+  font-size: 20px;
+  color: white;
+  background-color: orange;
+  cursor:pointer;
+  margin: 10px;
+`;
