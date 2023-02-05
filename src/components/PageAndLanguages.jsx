@@ -1,17 +1,11 @@
-
-import { BorderText, Text } from "../styled"
-
 export function PageAndLanguages({
   pages, controlPages, languages, controlLanguages
 }) {
   
   return (
-    <BorderText>
     <>
-    <Text>
           <div>
         <b>Pàgina web</b>
-
 
         <div>
           Pàgines <input
@@ -33,9 +27,9 @@ export function PageAndLanguages({
           onChange={controlLanguages}
         />
       </div>
-      </Text>
+  
     </>
-    </BorderText>
+   
   )
 }
 
