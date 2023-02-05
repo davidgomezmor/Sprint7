@@ -1,14 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { services } from "./services"
 import { PageAndLanguages } from "./components/PageAndLanguages";
-import { Title, Style, Body, Price } from "./styled"
-
-
 
 export default function App() {
 
-  const [pages, setPages] = useState(1);
-  const [languages, setLanguages] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [languages, setLanguages] = useState(0);
   const [checkedState, setCheckedState] = useState(
     new Array(services.length).fill(false),
   );
@@ -16,11 +13,12 @@ export default function App() {
 
   function controlPages(e) {
     setPages(e.target.value);
+    controlChanges()
   }
 
   function controlLanguages(e) {
     setLanguages(e.target.value);
-
+    controlChanges()
   }
 
   const controlChanges = (position) => {
@@ -39,17 +37,19 @@ export default function App() {
       },
       0);
 
-    setTotal((checkedState[0] && index === 0) ? (totalPrice + (pages * languages * 30)) : (totalPrice));
+    setTotal(totalPrice + (pages * languages * 30));
 
+    
   };
-  const printPrice = (price) => `${price} €`;
+  const printPrice = (price) => `${price}`;
   return (
-    <Body>
-      <div>
-        <Title><h2>Què vols fer?</h2></Title>
-        {services.map(({ name, price }, index) => {
-          return (
-            <Style>
+    <div>
+      <h2>Què vols fer?</h2>
+      {services.map(({ name, price }, index) => {
+        return (
+          <div>
+
+            <>
               <input
                 key={index}
                 type="checkbox"
@@ -57,27 +57,32 @@ export default function App() {
                 checked={checkedState[index]}
                 onChange={() => controlChanges(index)}
               />
-              {` ${name} `}
+              <div>
+                {name}
+              </div>
+            </>
+            {printPrice(price)}
+          </div>
+        )
+      })}
 
-              ({printPrice(price)})
-            </Style>
-          )
-        })}
-        {/* {checkedState[0] && index === 0 && (<PageAndLanguages/>)} */}
-          <PageAndLanguages
-            pages={pages}
-            languages={languages}
-            controlPages={controlPages}
-            controlLanguages={controlLanguages}
-          />
-        <Style>
-          <Price>Preu:
-            {printPrice(` ${total}`)}
-            {setTotal}</Price>
-        </Style>
+      {/* {checkedState[0] && index === 0 && (<PageAndLanguages/>)} */}
+      <div>
+
+        <PageAndLanguages
+          key={4}
+          pages={pages}
+          languages={languages}
+          controlPages={controlPages}
+          controlLanguages={controlLanguages}
+        />
+
       </div>
-    </Body>
+      <div>
+        <div>Total:
+          {printPrice(total)} {setTotal}
+        </div></div>
+    </div>
   );
-
 
 }
