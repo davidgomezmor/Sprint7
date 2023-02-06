@@ -1,43 +1,52 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { services } from "./services";
 import { PageAndLanguages } from "./components/PageAndLanguages";
+import { Form } from "./components/Form";
 
 export default function App() {
 
-  let [pages, setPages] = useState(1);
+  let [pages, setPages] = useState(0);
   let [languages, setLanguages] = useState(1);
+
   const [checkedState, setCheckedState] = useState(
     new Array(services.length).fill(false),
   );
   const [total, setTotal] = useState(0);
+  const [formPrice, setFormPrice] = useState(0);
   
-  const controlChanges = (position) => {
-    const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? !item : item,
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [checkedState, languages, pages]);
 
-    );
+   const onCheckboxSelected = (index) => {
+    let updatedCheckedState = [...checkedState];
+    updatedCheckedState[index] = !updatedCheckedState[index];
+    if (!updatedCheckedState[0]) {
 
+      setPages(0);
+      setLanguages(1);
+    }
     setCheckedState(updatedCheckedState);
     const totalPrice = updatedCheckedState.reduce(
       (sum, currentState, index) => {
-        if (currentState === true) {
+        if (currentState) {
           return sum + services[index].price;
         }
         return sum;
       },
       0);
 
-    setTotal(totalPrice + (pages * languages * 30));
+    setFormPrice(totalPrice);
+  }
+  const calculateTotalPrice = () => {
+    const subtotalWeb = (pages * languages) * 30;
+    const total = subtotalWeb + formPrice;
 
-    if (updatedCheckedState[0] === false) setPages(0);
-    if (updatedCheckedState[0] === false) setLanguages(0);
+    setTotal(total);
+  }
 
-    // useEffect(() => {
-    //   setTotal();
-    // }, [totalPrice, pages, languages]);
-
-  };
   const printPrice = (price) => `${price}`;
+
   return (
     <div>
       <h2>Què vols fer?</h2>
@@ -45,38 +54,37 @@ export default function App() {
         return (
           <div>
 
-            <>
-              <input
-                key={index}
-                type="checkbox"
-                id={index}
-                checked={checkedState[index]}
-                onChange={() => controlChanges(index)}
-              />
-              <div>
-                {name}
-              </div>
-              {price}
-            </>
+            <Form
+              key={index}
+              index={index}
+              price={price}
+              id={index}
+              onCheck={onCheckboxSelected}
+            />
+            <div>
+              {name}
+            </div>
+            {price}
+
           </div>
         )
       })}
 
-      {/* {checkedState[0] && index === 0 && (<PageAndLanguages/>)} */}
       <div>
         {!checkedState[0] ? ((pages = 0) && (languages = 0) && (setTotal(0))) :
           (<PageAndLanguages
             pages={pages}
             languages={languages}
             setPages={setPages}
-            setLanguages={setLanguages}         
+            setLanguages={setLanguages}
           />)
         }
       </div>
       <div>
         <div>Total:
-          {printPrice(total)} {setTotal}
-        </div></div>
+          {printPrice(total)}
+        </div>
+      </div>
     </div>
   );
 
