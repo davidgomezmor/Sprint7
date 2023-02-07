@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { services } from "./services";
 import { PageAndLanguages } from "./components/PageAndLanguages";
 import { Form } from "./components/Form";
+import { useLocalStorage } from "./useLocalStorage";
 
 export default function App() {
+  
+  
+  const [total, setTotal] = useState(useLocalStorage(total, 0))
 
   let [pages, setPages] = useState(0);
   let [languages, setLanguages] = useState(1);
@@ -11,14 +15,13 @@ export default function App() {
   const [checkedState, setCheckedState] = useState(
     new Array(services.length).fill(false),
   );
-  const [total, setTotal] = useState(0);
-  const [formPrice, setFormPrice] = useState(0);
   
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [checkedState, languages, pages]);
 
-   const onCheckboxSelected = (index) => {
+  const [formPrice, setFormPrice] = useState(0);
+
+
+
+  const onCheckboxSelected = (index) => {
     let updatedCheckedState = [...checkedState];
     updatedCheckedState[index] = !updatedCheckedState[index];
     if (!updatedCheckedState[0]) {
@@ -38,6 +41,10 @@ export default function App() {
 
     setFormPrice(totalPrice);
   }
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [checkedState, languages, pages]);
+
   const calculateTotalPrice = () => {
     const subtotalWeb = (pages * languages) * 30;
     const total = subtotalWeb + formPrice;
@@ -60,6 +67,7 @@ export default function App() {
               price={price}
               id={index}
               onCheck={onCheckboxSelected}
+              onChange={setTotal(e.target.value)}
             />
             <div>
               {name}
@@ -73,12 +81,14 @@ export default function App() {
       <div>
         {!checkedState[0] ? ((pages = 0) && (languages = 0) && (setTotal(0))) :
           (<PageAndLanguages
+            key={services.length}
             pages={pages}
             languages={languages}
             setPages={setPages}
             setLanguages={setLanguages}
           />)
         }
+
       </div>
       <div>
         <div>Total:
