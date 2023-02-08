@@ -67,5 +67,3 @@ export function PageAndLanguages({
       </>
     </BorderText>);
 }
-
-//rfce//

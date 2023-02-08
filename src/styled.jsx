@@ -1,5 +1,4 @@
-import styled from "styled-components";
-
+import styled, { keyframes } from 'styled-components';
 export const Body = styled.div`
   font-family: arial;
   background-color: lightblue;
@@ -76,3 +75,21 @@ export const Button = styled.button`
   }
   `;
 
+ 
+
+export const Background = styled.div`
+  background: linear-gradient(to right, white, #add8e9);
+  height: 100%;
+  animation: gradient 5s ease infinite;
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+`;

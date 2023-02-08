@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { services } from "./services";
 import { PageAndLanguages } from "./components/PageAndLanguages";
 import { Form } from "./components/Form";
-import { useLocalStorage } from "./useLocalStorage";
+import { Background } from "./styled";
 
 export default function App() {
-  
-  
-  const [total, setTotal] = useState(useLocalStorage(total, 0))
 
   let [pages, setPages] = useState(0);
   let [languages, setLanguages] = useState(1);
@@ -15,8 +12,7 @@ export default function App() {
   const [checkedState, setCheckedState] = useState(
     new Array(services.length).fill(false),
   );
-  
-
+  const [total, setTotal] = useState(0);
   const [formPrice, setFormPrice] = useState(0);
 
 
@@ -43,7 +39,8 @@ export default function App() {
   }
   useEffect(() => {
     calculateTotalPrice();
-  }, [checkedState, languages, pages]);
+    localStorage.setItem("total", total);
+  }, [checkedState, languages, pages, total]);
 
   const calculateTotalPrice = () => {
     const subtotalWeb = (pages * languages) * 30;
@@ -55,7 +52,7 @@ export default function App() {
   const printPrice = (price) => `${price}`;
 
   return (
-    <div>
+    <Background>
       <h2>Què vols fer?</h2>
       {services.map(({ name, price }, index) => {
         return (
@@ -67,7 +64,6 @@ export default function App() {
               price={price}
               id={index}
               onCheck={onCheckboxSelected}
-              onChange={setTotal(e.target.value)}
             />
             <div>
               {name}
@@ -88,14 +84,14 @@ export default function App() {
             setLanguages={setLanguages}
           />)
         }
-
+       
       </div>
       <div>
         <div>Total:
           {printPrice(total)}
         </div>
       </div>
-    </div>
+    </Background>
   );
 
 }
